@@ -69,38 +69,3 @@ m<-cor(bike_train_set.cor)
 corrplot(m, lower="square")
 dim(bike_train_set.reduced)
 
-##After analyzing correlation matrices PCA can be implemented manually 
-##or using available Caret package.
-
-#Lets implement PCA the attributes includes temp,atemp,humidity,windspeed
-bike_train_set.required <- bike_train_set.reduced[,c(11:14)]
-head(bike_train_set.required)
-dim(bike_train_set.required)
-bike_train_set.manpca<-prcomp(bike_train_set.required,
-                              center = TRUE,
-                              scale. = TRUE)
-print(bike_train_set.manpca)
-
-# plot the PCA 
-par(mfrow=c(1,1))
-plot(bike_train_set.manpca,type="l")
-summary(bike_train_set.manpca)
-
-# Lets predict
-predict(bike_train_set.manpca)
-install.packages("devtools")
-
-install.packages("ggplot2")
-install.packages("ggbiplot")
-library(devtools)
-library(ggbiplot)
-install_github("ggbiplot", "vqv")
-
-g <- ggbiplot(bike_train_set.manpca, 
-              obs.scale = 1, var.scale = 1, 
-              ellipse = TRUE, 
-              circle = TRUE)
-g <- g + scale_color_discrete(name = '')
-g <- g + theme(legend.direction = 'horizontal', 
-               legend.position = 'top')
-print(g)
