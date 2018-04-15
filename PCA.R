@@ -69,3 +69,33 @@ m<-cor(bike_train_set.cor)
 corrplot(m, lower="square")
 dim(bike_train_set.reduced)
 
+# PCA by Caret
+library(caret)
+bike_train_set.trans = preProcess(bike_train_set.required, 
+                                  method=c("BoxCox", "center", 
+                                           "scale", "pca"))
+bike_test_set.trans = preProcess(bike_train_set.required, 
+                                 method=c("BoxCox", "center", 
+                                          "scale", "pca"))
+bike_train_set.manpca = 
+  predict(bike_train_set.trans, 
+          bike_train_set.required)
+# Predict the PCA
+bike_test_set.manpca = 
+  predict(bike_train_set.trans, 
+          bike_train_set.required)
+bike_test_set.new <- cbind(bike_test_set.reduced[,c(1,2,3,4,5)],bike_test_set.manpca)
+bike_train_set.new <- cbind(bike_train_set.reduced[,c(1,2,3,4,5,6,7,8,9,10)],bike_train_set.manpca,bike_train_set.reduced[,c(15,16,17)])
+
+#Lets plot PCA
+install_github("ggbiplot", "vqv")
+library(ggbiplot)
+library(devtools)
+g <- ggbiplot(bike_train_set.manpca, 
+              obs.scale = 1, var.scale = 1, 
+              ellipse = TRUE, 
+              circle = TRUE)
+g <- g + scale_color_discrete(name = '')
+g <- g + theme(legend.direction = 'horizontal', 
+               legend.position = 'top')
+print(g)
