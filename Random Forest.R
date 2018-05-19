@@ -1,3 +1,7 @@
+library(sqldf)
+
+setwd("C:/Users/new/Desktop/Data Bike Sharing/Input Data")
+
 # We have read traindata and testdata mydata 
 traindata=read.csv("train_bike.csv")
 testdata=read.csv("test_bike.csv")
